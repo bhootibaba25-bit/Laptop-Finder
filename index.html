@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechFinder Pro - Laptop Recommendation & Quotes</title>
+    <title>TechFinder Pro - Intelligent Laptop Recommendations & Invoices</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -11,43 +11,137 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
             color: #1d1d1f; 
             margin: 0; 
-            padding: 40px 15px;
+            padding: 30px 15px 60px 15px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
+        /* Top Nav Bar */
+        .top-nav {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #d2d2d7;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d1d1f;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s;
+        }
+        .settings-btn:hover {
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #a1a1a6;
+            display: inline-block;
+        }
+        .status-dot.active {
+            background: #34c759;
+            box-shadow: 0 0 6px rgba(52, 199, 89, 0.6);
+        }
+
+        /* Main Form Container */
         .container { 
             background-color: rgba(255, 255, 255, 0.96); 
-            padding: 40px; 
+            padding: 35px 40px; 
             border-radius: 24px; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.06); 
             width: 100%; 
-            max-width: 480px; 
+            max-width: 520px; 
             text-align: center;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
         }
 
         h1, h2 { color: #1d1d1f; margin-top: 0; letter-spacing: -0.5px; }
         h2 { font-size: 28px; margin-bottom: 5px; font-weight: 700; }
-        p.subtitle { color: #86868b; font-size: 15px; margin-bottom: 25px; margin-top: 0; }
+        p.subtitle { color: #86868b; font-size: 14px; margin-bottom: 22px; margin-top: 0; }
+
+        /* Engine Switcher Pill */
+        .engine-tabs {
+            display: flex;
+            background: #f0f2f5;
+            padding: 4px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .engine-tab {
+            flex: 1;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #515154;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .engine-tab.active {
+            background: #ffffff;
+            color: #0071e3;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
         
         label { text-align: left; display: block; margin-top: 15px; font-weight: 600; font-size: 12px; color: #515154; text-transform: uppercase; letter-spacing: 0.5px; }
-        input[type="number"], input[type="text"], select { 
-            padding: 14px; 
-            margin: 8px 0; 
+        input[type="number"], input[type="text"], select, textarea { 
+            padding: 13px 15px; 
+            margin: 7px 0; 
             border-radius: 12px; 
             border: 1px solid #d2d2d7; 
             width: 100%; 
             background: #ffffff; 
             color: #1d1d1f; 
-            font-size: 15px;
+            font-size: 14px;
+            font-family: inherit;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        input:focus, select:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12); }
+        textarea { resize: vertical; min-height: 65px; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12); }
         
+        .ai-options {
+            display: none;
+            background: #f8faff;
+            border: 1px dashed #bcdcff;
+            padding: 14px;
+            border-radius: 14px;
+            margin-top: 14px;
+            text-align: left;
+        }
+        .ai-options p {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: #0071e3;
+        }
+
         .btn { 
             padding: 15px 20px; 
             background: #0071e3; 
@@ -60,6 +154,10 @@
             margin-top: 20px; 
             font-weight: 600;
             transition: background 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         .btn:hover { background: #0077ed; transform: translateY(-1px); }
         .btn:active { transform: translateY(0); }
@@ -73,6 +171,31 @@
             margin-top: 35px;
             text-align: center;
             display: none;
+        }
+
+        .results-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1050px;
+            margin: 0 auto 20px auto;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .source-pill {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            color: #1d1d1f;
+        }
+        .source-pill.ai {
+            background: #f0f7ff;
+            color: #0071e3;
+            border-color: #bad9ff;
         }
 
         .stats-bar { 
@@ -94,7 +217,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 22px;
         }
 
         .card { 
@@ -102,25 +225,60 @@
             padding: 24px; 
             border-radius: 20px; 
             text-align: left; 
-            width: 320px; 
+            width: 325px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.06); 
             border: 1px solid #e2e8f0; 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
         }
         .card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
         
         .tag { background: #f0f7ff; color: #0071e3; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; }
         .best-value { background: #fff5f5; color: #e53e3e; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-left: 5px; display: inline-block; }
         
-        .specs-box { background: #fbfbfd; padding: 14px; border-radius: 12px; margin: 15px 0; border: 1px solid #f0f0f0; }
+        .ai-highlight {
+            background: #f6f9fe;
+            border-left: 3px solid #0071e3;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .specs-box { background: #fbfbfd; padding: 14px; border-radius: 12px; margin: 12px 0; border: 1px solid #f0f0f0; }
         .specs-box p { margin: 5px 0; font-size: 13px; color: #515154; }
 
+        /* Skeleton Loading Animation */
+        .skeleton-card {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 20px;
+            width: 325px;
+            height: 380px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .skeleton-shimmer {
+            background: linear-gradient(90deg, #f0f0f2 25%, #e6e6e8 50%, #f0f0f2 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
         /* Modal */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); overflow-y: auto; padding: 20px 0; }
-        .modal-content { background-color: #ffffff; margin: 40px auto; padding: 35px; border-radius: 24px; max-width: 500px; width: 90%; text-align: left; box-shadow: 0 30px 60px rgba(0,0,0,0.25); border: 1px solid #e2e8f0; position: relative; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); overflow-y: auto; padding: 20px 0; }
+        .modal-content { background-color: #ffffff; margin: 40px auto; padding: 35px; border-radius: 24px; max-width: 520px; width: 90%; text-align: left; box-shadow: 0 30px 60px rgba(0,0,0,0.25); border: 1px solid #e2e8f0; position: relative; }
         .close { color: #86868b; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 20px; transition: color 0.2s; }
         .close:hover { color: #1d1d1f; }
         .config-section { background: #fbfbfd; padding: 16px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #f0f0f0; }
@@ -147,9 +305,28 @@
 </head>
 <body>
 
+    <!-- Top Bar with Settings -->
+    <div class="top-nav">
+        <button class="settings-btn" onclick="openSettingsModal()">
+            <span class="status-dot" id="apiStatusDot"></span>
+            <span>⚙️ AI Engine Settings</span>
+        </button>
+    </div>
+
+    <!-- Search Form -->
     <div class="container" id="searchContainer">
         <h2>TechFinder Pro</h2>
         <p class="subtitle">Search, configure, and download quotes.</p>
+
+        <!-- Engine Selector -->
+        <div class="engine-tabs">
+            <button type="button" class="engine-tab active" id="tabCatalog" onclick="setEngineMode('catalog')">
+                📦 Curated Catalog (100+)
+            </button>
+            <button type="button" class="engine-tab" id="tabAi" onclick="setEngineMode('ai')">
+                ✨ AI Live Market
+            </button>
+        </div>
         
         <form id="searchForm" onsubmit="handleSearch(event)">
             <label>Maximum Budget (Rs.):</label>
@@ -171,21 +348,63 @@
             </select>
 
             <label>Preferred Brand (Optional):</label>
-            <input type="text" id="brandInput" placeholder="e.g. Apple, Dell, Lenovo">
+            <input type="text" id="brandInput" placeholder="e.g. Apple, Dell, Lenovo, Asus">
+
+            <!-- Dynamic AI Requirement Box -->
+            <div class="ai-options" id="aiOptions">
+                <p>✨ AI Live Requirements (Optional):</p>
+                <textarea id="aiCustomPrompt" placeholder="e.g. Need 16GB RAM for Machine Learning & coding, lightweight for travel, long battery life, 14-inch screen..."></textarea>
+            </div>
             
-            <button type="submit" class="btn">Search Inventory</button>
+            <button type="submit" class="btn" id="searchSubmitBtn">
+                <span>🔍 Search Inventory</span>
+            </button>
         </form>
     </div>
 
     <!-- Results Section -->
     <div id="resultsSection">
-        <div style="display:flex; justify-content:space-between; align-items:center; max-width:1050px; margin:0 auto 20px auto; flex-wrap:wrap; gap:10px;">
-            <h2 style="font-size:28px; margin:0;">Inventory Results</h2>
+        <div class="results-header-bar">
+            <div>
+                <h2 style="font-size:28px; margin:0; display:inline-block; vertical-align:middle;">Inventory Results</h2>
+                <span id="resultsSourceBadge" class="source-pill" style="margin-left:12px;"></span>
+            </div>
             <button class="btn btn-outline" style="width:auto; padding:10px 20px; margin:0;" onclick="resetSearch()">← Modify Filters</button>
         </div>
 
         <div id="statsContainer"></div>
         <div class="cards-grid" id="cardsGrid"></div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSettingsModal()">&times;</span>
+            <h3 style="margin-top:0; color:#1d1d1f;">⚙️ AI Engine Configuration</h3>
+            <p style="color:#64748b; font-size:13px; line-height:1.5;">
+                Connect Google Gemini to dynamically recommend the latest real-world laptops released across retail markets in real time.
+            </p>
+
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:12px; margin:15px 0; font-size:12px; color:#166534;">
+                ✅ <b>100% Free:</b> Google Gemini 1.5 Flash provides 15 free requests per minute with no credit card required.
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#0071e3; font-weight:600; text-decoration:underline; display:block; margin-top:4px;">
+                    👉 Click here to get a free API Key from Google AI Studio
+                </a>
+            </div>
+
+            <label>Google Gemini API Key:</label>
+            <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy...">
+            <p style="color:#86868b; font-size:11px; margin-top:2px;">
+                🔒 Stored securely inside your browser's private localStorage. Never sent to any third-party server.
+            </p>
+
+            <div id="settingsTestStatus" style="font-size:13px; margin: 10px 0; display:none;"></div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="button" class="btn" style="margin:0;" onclick="saveAndTestApiKey()">Save & Verify Key</button>
+                <button type="button" class="btn btn-outline" style="margin:0; width:auto;" onclick="clearApiKey()">Clear</button>
+            </div>
+        </div>
     </div>
 
     <!-- Modal Configurator -->
@@ -274,7 +493,7 @@
     </div>
 
     <script>
-        const inventory = [
+        const curatedInventory = [
   {
     "brand": "Asus",
     "model": "Chromebook CX1",
@@ -1276,27 +1495,80 @@
     "display": "RTX 4090 16GB"
   }
 ];
-
+        let currentEngineMode = 'catalog'; // 'catalog' or 'ai'
         let currentBasePrice = 0;
 
-        function handleSearch(e) {
+        // Init API status
+        window.addEventListener('DOMContentLoaded', () => {
+            updateApiStatusUI();
+        });
+
+        function updateApiStatusUI() {
+            const key = localStorage.getItem('techfinder_gemini_key') || '';
+            const dot = document.getElementById('apiStatusDot');
+            if (key.trim()) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        }
+
+        function setEngineMode(mode) {
+            currentEngineMode = mode;
+            const tabCatalog = document.getElementById('tabCatalog');
+            const tabAi = document.getElementById('tabAi');
+            const aiOptions = document.getElementById('aiOptions');
+            const searchBtn = document.getElementById('searchSubmitBtn');
+
+            if (mode === 'ai') {
+                tabAi.classList.add('active');
+                tabCatalog.classList.remove('active');
+                aiOptions.style.display = 'block';
+                searchBtn.innerHTML = '<span>✨ Find Real-Time Laptops with AI</span>';
+                
+                // Prompt user to set up API key if empty
+                const key = localStorage.getItem('techfinder_gemini_key') || '';
+                if (!key.trim()) {
+                    openSettingsModal();
+                }
+            } else {
+                tabCatalog.classList.add('active');
+                tabAi.classList.remove('active');
+                aiOptions.style.display = 'none';
+                searchBtn.innerHTML = '<span>🔍 Search Curated Inventory</span>';
+            }
+        }
+
+        async function handleSearch(e) {
             e.preventDefault();
             const budget = parseFloat(document.getElementById('budgetInput').value) || 0;
             const category = document.getElementById('categorySelect').value;
             const sort = document.getElementById('sortSelect').value;
             const brandFilter = document.getElementById('brandInput').value.toLowerCase().trim();
+            const customReq = document.getElementById('aiCustomPrompt').value.trim();
 
-            let filtered = inventory.filter(item => {
+            if (currentEngineMode === 'ai') {
+                const key = (localStorage.getItem('techfinder_gemini_key') || '').trim();
+                if (!key) {
+                    openSettingsModal();
+                    return;
+                }
+                await runAiLiveSearch(budget, category, brandFilter, sort, customReq, key);
+            } else {
+                runCatalogSearch(budget, category, brandFilter, sort);
+            }
+        }
+
+        function runCatalogSearch(budget, category, brandFilter, sort) {
+            let filtered = curatedInventory.filter(item => {
                 const matchBudget = item.price <= budget;
                 const matchCategory = category === 'All' || item.category.toLowerCase() === category.toLowerCase();
                 const matchBrand = !brandFilter || item.brand.toLowerCase().includes(brandFilter);
                 return matchBudget && matchCategory && matchBrand;
             });
 
-            // Sorting
             filtered.sort((a, b) => sort === 'low' ? a.price - b.price : b.price - a.price);
 
-            // Compute best value index (RAM GB / price ratio)
             let bestIndex = -1;
             let bestRatio = 0;
             filtered.forEach((item, idx) => {
@@ -1308,15 +1580,134 @@
                 }
             });
 
-            renderResults(filtered, bestIndex);
+            renderResults(filtered, bestIndex, '📦 Curated Catalog');
         }
 
-        function renderResults(list, bestIndex) {
+        async function runAiLiveSearch(budget, category, brandFilter, sort, customReq, apiKey) {
+            showSkeletonLoading();
+
+            const prompt = `You are an expert consumer technology consultant specializing in laptops.
+Your task is to recommend 6 to 10 real, accurately named laptop models that are actively available on the market right now matching the user's constraints.
+
+USER CONSTRAINTS:
+- Maximum Budget: INR (Rs.) ${budget}
+- Target Usage Category: ${category}
+- Preferred Brand: ${brandFilter || 'Any reputable brand (Apple, Dell, Asus, Lenovo, HP, Acer, Samsung, etc.)'}
+- Additional Requirements / Use-Case: ${customReq || 'General optimal performance and reliability'}
+- Sort Preference: ${sort === 'low' ? 'Prioritize best budget & affordability' : 'Prioritize highest performance and premium build'}
+
+STRICT REQUIREMENTS:
+1. Every price MUST be an accurate realistic INR estimate at or strictly under Rs. ${budget}.
+2. Provide realistic retail specs: exact processor (CPU), RAM, Storage, and Display.
+3. Mark exactly one laptop as bestValue: true (the one with the best performance-to-price ratio).
+4. Provide a punchy 1-sentence "highlight" for why each laptop fits this user.
+5. Return ONLY a valid JSON object matching the requested schema.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    response_mime_type: "application/json",
+                    response_schema: {
+                        type: "OBJECT",
+                        properties: {
+                            laptops: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        brand: { type: "STRING" },
+                                        model: { type: "STRING" },
+                                        category: { type: "STRING" },
+                                        price: { type: "NUMBER" },
+                                        cpu: { type: "STRING" },
+                                        ram: { type: "STRING" },
+                                        storage: { type: "STRING" },
+                                        display: { type: "STRING" },
+                                        highlight: { type: "STRING" },
+                                        bestValue: { type: "BOOLEAN" }
+                                    },
+                                    required: ["brand", "model", "category", "price", "cpu", "ram", "storage", "display"]
+                                }
+                            }
+                        },
+                        required: ["laptops"]
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errJson = await response.json().catch(() => ({}));
+                    throw new Error(errJson.error?.message || `API error (${response.status})`);
+                }
+
+                const data = await response.json();
+                const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawJsonText) throw new Error("Empty response from AI model.");
+
+                const parsed = JSON.parse(rawJsonText);
+                let list = parsed.laptops || [];
+
+                if (sort === 'low') {
+                    list.sort((a, b) => a.price - b.price);
+                } else {
+                    list.sort((a, b) => b.price - a.price);
+                }
+
+                let bestIndex = list.findIndex(item => item.bestValue === true);
+                if (bestIndex === -1 && list.length > 0) bestIndex = 0;
+
+                renderResults(list, bestIndex, '✨ AI Live Market (Gemini)', true);
+
+            } catch (err) {
+                console.error("AI Fetch Error:", err);
+                alert(`Notice: Could not connect to Gemini AI (${err.message}). Showing verified matching laptops from our curated database instead.`);
+                runCatalogSearch(budget, category, brandFilter, sort);
+            }
+        }
+
+        function showSkeletonLoading() {
             const resultsSection = document.getElementById('resultsSection');
             const statsContainer = document.getElementById('statsContainer');
             const cardsGrid = document.getElementById('cardsGrid');
+            const badge = document.getElementById('resultsSourceBadge');
+
+            badge.className = 'source-pill ai';
+            badge.innerText = '✨ Querying Live Market with Gemini...';
+            resultsSection.style.display = 'block';
+            statsContainer.innerHTML = '<p style="color:#0071e3; font-weight:600;">🤖 AI is scanning real-world laptop databases and synthesizing quotes...</p>';
+
+            let skeletons = '';
+            for (let i = 0; i < 6; i++) {
+                skeletons += `
+                    <div class="skeleton-card">
+                        <div class="skeleton-shimmer" style="width: 80px; height: 24px;"></div>
+                        <div class="skeleton-shimmer" style="width: 200px; height: 26px;"></div>
+                        <div class="skeleton-shimmer" style="width: 100%; height: 110px;"></div>
+                        <div class="skeleton-shimmer" style="width: 120px; height: 30px; margin-top: auto;"></div>
+                        <div class="skeleton-shimmer" style="width: 100%; height: 42px;"></div>
+                    </div>
+                `;
+            }
+            cardsGrid.innerHTML = skeletons;
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderResults(list, bestIndex, sourceLabel, isAi = false) {
+            const resultsSection = document.getElementById('resultsSection');
+            const statsContainer = document.getElementById('statsContainer');
+            const cardsGrid = document.getElementById('cardsGrid');
+            const badge = document.getElementById('resultsSourceBadge');
             
             resultsSection.style.display = 'block';
+            badge.className = 'source-pill' + (isAi ? ' ai' : '');
+            badge.innerText = sourceLabel;
 
             if (list.length === 0) {
                 statsContainer.innerHTML = '';
@@ -1340,7 +1731,6 @@
             let cardsHtml = '';
             list.forEach((lap, idx) => {
                 const fullName = `${lap.brand} ${lap.model}`;
-                // deterministic stock count based on name hash
                 let hash = 0;
                 for (let i = 0; i < fullName.length; i++) hash = (hash << 5) - hash + fullName.charCodeAt(i);
                 const stockLeft = Math.abs(hash % 6) + 1;
@@ -1354,7 +1744,8 @@
                                 <span class="tag">${lap.category}</span>
                                 ${isBest ? '<span class="best-value">👑 Best Value</span>' : ''}
                             </div>
-                            <h3 style="margin:14px 0 10px 0; color:#1d1d1f; font-size:18px;">${fullName}</h3>
+                            <h3 style="margin:14px 0 6px 0; color:#1d1d1f; font-size:18px;">${fullName}</h3>
+                            ${lap.highlight ? `<div class="ai-highlight">💡 ${lap.highlight}</div>` : ''}
                             <div class="specs-box">
                                 <p>⚙️ <b>CPU:</b> ${lap.cpu}</p>
                                 <p>🧠 <b>RAM:</b> ${lap.ram}</p>
@@ -1387,7 +1778,6 @@
             document.getElementById('modalTitle').innerText = laptopName;
             document.getElementById('modalBasePrice').innerText = 'Base Price: Rs. ' + basePrice.toLocaleString();
             
-            // Reset radios to defaults
             document.querySelector('input[name="ram"][value="0"]').checked = true;
             document.querySelector('input[name="storage"][value="0"]').checked = true;
             
@@ -1441,9 +1831,71 @@
             document.getElementById('invoiceView').style.display = 'none';
         }
 
+        // Settings modal functions
+        function openSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            const input = document.getElementById('geminiApiKeyInput');
+            input.value = localStorage.getItem('techfinder_gemini_key') || '';
+            document.getElementById('settingsTestStatus').style.display = 'none';
+            modal.style.display = 'block';
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        async function saveAndTestApiKey() {
+            const input = document.getElementById('geminiApiKeyInput');
+            const statusDiv = document.getElementById('settingsTestStatus');
+            const key = input.value.trim();
+
+            if (!key) {
+                statusDiv.style.display = 'block';
+                statusDiv.innerHTML = '<span style="color:#e53e3e;">Please paste your Google Gemini API Key.</span>';
+                return;
+            }
+
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '<span style="color:#0071e3;">Testing connection with Google Gemini...</span>';
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: "ping" }] }] })
+                });
+
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({}));
+                    throw new Error(errData.error?.message || 'Invalid API Key');
+                }
+
+                localStorage.setItem('techfinder_gemini_key', key);
+                updateApiStatusUI();
+                statusDiv.innerHTML = '<span style="color:#16a34a; font-weight:600;">✅ Success! API Key verified & saved safely in browser.</span>';
+                setTimeout(() => {
+                    closeSettingsModal();
+                }, 1200);
+
+            } catch (err) {
+                statusDiv.innerHTML = `<span style="color:#e53e3e; font-weight:600;">❌ Verification failed: ${err.message}</span>`;
+            }
+        }
+
+        function clearApiKey() {
+            localStorage.removeItem('techfinder_gemini_key');
+            document.getElementById('geminiApiKeyInput').value = '';
+            const statusDiv = document.getElementById('settingsTestStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '<span style="color:#64748b;">API key removed.</span>';
+            updateApiStatusUI();
+        }
+
         window.onclick = function(event) {
-            const modal = document.getElementById('configModal');
-            if (event.target === modal) closeConfigurator();
+            const configModal = document.getElementById('configModal');
+            const settingsModal = document.getElementById('settingsModal');
+            if (event.target === configModal) closeConfigurator();
+            if (event.target === settingsModal) closeSettingsModal();
         };
     </script>
 </body>
