@@ -2,77 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Laptop Recommendation Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFinder Pro - Laptop Recommendation & Quotes</title>
     <style>
-        
+        * { box-sizing: border-box; }
         body { 
-            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
             color: #1d1d1f; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
             margin: 0; 
+            padding: 40px 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         .container { 
-            background-color: rgba(255, 255, 255, 0.95); 
+            background-color: rgba(255, 255, 255, 0.96); 
             padding: 40px; 
             border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06); 
             width: 100%; 
-            max-width: 450px; 
+            max-width: 480px; 
             text-align: center;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
-        h2 { color: #1d1d1f; font-size: 28px; margin-bottom: 5px; font-weight: 700; letter-spacing: -0.5px;}
-        p.subtitle { color: #86868b; font-size: 15px; margin-bottom: 30px; }
+
+        h1, h2 { color: #1d1d1f; margin-top: 0; letter-spacing: -0.5px; }
+        h2 { font-size: 28px; margin-bottom: 5px; font-weight: 700; }
+        p.subtitle { color: #86868b; font-size: 15px; margin-bottom: 25px; margin-top: 0; }
         
-        label { text-align: left; display: block; margin-top: 15px; font-weight: 600; font-size: 12px; color: #515154; text-transform: uppercase; letter-spacing: 0.5px;}
+        label { text-align: left; display: block; margin-top: 15px; font-weight: 600; font-size: 12px; color: #515154; text-transform: uppercase; letter-spacing: 0.5px; }
         input[type="number"], input[type="text"], select { 
             padding: 14px; 
             margin: 8px 0; 
             border-radius: 12px; 
             border: 1px solid #d2d2d7; 
             width: 100%; 
-            box-sizing: border-box; 
             background: #ffffff; 
             color: #1d1d1f; 
             font-size: 15px;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        input:focus, select:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1); }
+        input:focus, select:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12); }
         
-        button { 
-            padding: 16px 20px; 
+        .btn { 
+            padding: 15px 20px; 
             background: #0071e3; 
             color: white; 
             border: none; 
             border-radius: 12px; 
             cursor: pointer; 
             width: 100%; 
-            font-size: 16px; 
-            margin-top: 25px; 
+            font-size: 15px; 
+            margin-top: 20px; 
             font-weight: 600;
-            transition: background 0.2s, transform 0.2s;
+            transition: background 0.2s, transform 0.15s;
         }
-        button:hover { 
-            background: #0077ed; 
-            transform: scale(1.02); 
+        .btn:hover { background: #0077ed; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn-outline { background: #ffffff; color: #0071e3; border: 2px solid #0071e3; margin-top: 10px; }
+        .btn-outline:hover { background: #f0f7ff; }
+
+        /* Results section */
+        #resultsSection {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 35px;
+            text-align: center;
+            display: none;
+        }
+
+        .stats-bar { 
+            background: #ffffff; 
+            padding: 18px 24px; 
+            border-radius: 16px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            display: inline-flex; 
+            gap: 20px;
+            border: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stat-item { padding: 0 15px; border-right: 1px solid #e2e8f0; }
+        .stat-item:last-child { border: none; }
+
+        .cards-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card { 
+            background: #ffffff; 
+            padding: 24px; 
+            border-radius: 20px; 
+            text-align: left; 
+            width: 320px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06); 
+            border: 1px solid #e2e8f0; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        
+        .tag { background: #f0f7ff; color: #0071e3; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; }
+        .best-value { background: #fff5f5; color: #e53e3e; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-left: 5px; display: inline-block; }
+        
+        .specs-box { background: #fbfbfd; padding: 14px; border-radius: 12px; margin: 15px 0; border: 1px solid #f0f0f0; }
+        .specs-box p { margin: 5px 0; font-size: 13px; color: #515154; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); overflow-y: auto; padding: 20px 0; }
+        .modal-content { background-color: #ffffff; margin: 40px auto; padding: 35px; border-radius: 24px; max-width: 500px; width: 90%; text-align: left; box-shadow: 0 30px 60px rgba(0,0,0,0.25); border: 1px solid #e2e8f0; position: relative; }
+        .close { color: #86868b; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 20px; transition: color 0.2s; }
+        .close:hover { color: #1d1d1f; }
+        .config-section { background: #fbfbfd; padding: 16px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #f0f0f0; }
+
+        /* Invoice */
+        .invoice-box { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background: #f5f7fa; padding: 30px 15px; overflow-y: auto; }
+        .invoice-card { background: #ffffff; max-width: 700px; margin: 20px auto; padding: 45px; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-top: 8px solid #0071e3; text-align: left; }
+        .invoice-header { display: flex; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 25px; }
+        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+        .invoice-table th { text-align: left; padding: 12px; border-bottom: 2px solid #e2e8f0; color: #86868b; font-size: 13px; }
+        .invoice-table td { padding: 14px 12px; border-bottom: 1px solid #f0f0f0; color: #1d1d1f; font-weight: 600; font-size: 14px; }
+        .invoice-totals { width: 60%; margin-left: auto; border-top: 2px solid #e2e8f0; padding-top: 15px; }
+        .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: #515154; font-size: 15px; }
+        .grand-total { display: flex; justify-content: space-between; margin-top: 12px; color: #0071e3; font-size: 20px; font-weight: 800; border-top: 2px dashed #0071e3; padding-top: 12px; }
+
+        @media print { 
+            body * { visibility: hidden; } 
+            .invoice-card, .invoice-card * { visibility: visible; } 
+            .invoice-box { position: static; background: white; padding: 0; }
+            .invoice-card { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border-top: none; padding: 0; } 
+            .no-print { display: none !important; } 
         }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <div class="container" id="searchContainer">
         <h2>TechFinder Pro</h2>
         <p class="subtitle">Search, configure, and download quotes.</p>
         
-        <form action="recommend" method="POST">
+        <form id="searchForm" onsubmit="handleSearch(event)">
             <label>Maximum Budget (Rs.):</label>
-            <input type="number" name="budget" placeholder="e.g. 150000" required>
+            <input type="number" id="budgetInput" placeholder="e.g. 150000" required>
             
             <label>Usage Category:</label>
-            <select name="category">
+            <select id="categorySelect">
                 <option value="All">All Categories</option>
                 <option value="Student">Student & Education</option>
                 <option value="Business">Business & Corporate</option>
@@ -81,16 +165,1286 @@
             </select>
 
             <label>Sort Results By:</label>
-            <select name="sort">
+            <select id="sortSelect">
                 <option value="low">Price: Low to High</option>
                 <option value="high">Price: High to Low</option>
             </select>
 
             <label>Preferred Brand (Optional):</label>
-            <input type="text" name="brand" placeholder="e.g. Apple, Dell">
+            <input type="text" id="brandInput" placeholder="e.g. Apple, Dell, Lenovo">
             
-            <button type="submit">Search Inventory</button>
+            <button type="submit" class="btn">Search Inventory</button>
         </form>
     </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection">
+        <div style="display:flex; justify-content:space-between; align-items:center; max-width:1050px; margin:0 auto 20px auto; flex-wrap:wrap; gap:10px;">
+            <h2 style="font-size:28px; margin:0;">Inventory Results</h2>
+            <button class="btn btn-outline" style="width:auto; padding:10px 20px; margin:0;" onclick="resetSearch()">← Modify Filters</button>
+        </div>
+
+        <div id="statsContainer"></div>
+        <div class="cards-grid" id="cardsGrid"></div>
+    </div>
+
+    <!-- Modal Configurator -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfigurator()">&times;</span>
+            <h3 id="modalTitle" style="margin-top:0; color:#1d1d1f;">Configure Laptop</h3>
+            <p id="modalBasePrice" style="color:#86868b; font-weight:600; margin-bottom:20px;"></p>
+
+            <div class="config-section">
+                <h4 style="margin:0 0 10px 0; color:#1d1d1f;">🧠 Memory (RAM)</h4>
+                <label style="display:block; margin:8px 0; color:#1d1d1f; cursor:pointer;">
+                    <input type="radio" name="ram" value="0" data-label="Base RAM" checked onchange="calculateTotal()"> Keep Base RAM (Included)
+                </label>
+                <label style="display:block; margin:8px 0; color:#1d1d1f; cursor:pointer;">
+                    <input type="radio" name="ram" value="5000" data-label="16GB DDR5 High-Speed Upgrade" onchange="calculateTotal()"> Upgrade to 16GB RAM (+ Rs. 5,000)
+                </label>
+                <label style="display:block; margin:8px 0; color:#1d1d1f; cursor:pointer;">
+                    <input type="radio" name="ram" value="12000" data-label="32GB Extreme Performance Upgrade" onchange="calculateTotal()"> Upgrade to 32GB RAM (+ Rs. 12,000)
+                </label>
+            </div>
+
+            <div class="config-section">
+                <h4 style="margin:0 0 10px 0; color:#1d1d1f;">💾 Storage (SSD)</h4>
+                <label style="display:block; margin:8px 0; color:#1d1d1f; cursor:pointer;">
+                    <input type="radio" name="storage" value="0" data-label="Base SSD" checked onchange="calculateTotal()"> Keep Base Storage (Included)
+                </label>
+                <label style="display:block; margin:8px 0; color:#1d1d1f; cursor:pointer;">
+                    <input type="radio" name="storage" value="8000" data-label="1TB NVMe SSD Upgrade" onchange="calculateTotal()"> Upgrade to 1TB SSD (+ Rs. 8,000)
+                </label>
+                <label style="display:block; margin:8px 0; color:#1d1d1f; cursor:pointer;">
+                    <input type="radio" name="storage" value="18000" data-label="2TB Ultra NVMe SSD Upgrade" onchange="calculateTotal()"> Upgrade to 2TB SSD (+ Rs. 18,000)
+                </label>
+            </div>
+
+            <h2 id="modalFinalPrice" style="color:#0071e3; margin-top:20px; font-size:24px;">Final Price: Rs. 0</h2>
+            <button class="btn" onclick="generateInvoice()">🧾 Generate Official Bill</button>
+        </div>
+    </div>
+
+    <!-- Invoice View -->
+    <div id="invoiceView" class="invoice-box">
+        <div class="invoice-card">
+            <div class="invoice-header">
+                <div>
+                    <h1 style="color:#1d1d1f; margin:0; font-size:24px;">TechFinder Pro</h1>
+                    <p style="color:#86868b; margin:5px 0 0 0; font-size:14px;">Official Tax Invoice</p>
+                </div>
+                <div style="text-align:right;">
+                    <b style="color:#1d1d1f;">Order ID: <span id="invOrder"></span></b><br>
+                    <span style="color:#86868b; font-size:14px;">Date: <span id="invDate"></span></span>
+                </div>
+            </div>
+
+            <table class="invoice-table">
+                <thead>
+                    <tr><th>Description</th><th style="text-align:right;">Amount (INR)</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b><span id="invItemName"></span></b><br><span style="color:#86868b; font-size:13px;">Base Configuration</span></td>
+                        <td style="text-align:right;">Rs. <span id="invBasePrice"></span></td>
+                    </tr>
+                    <tr>
+                        <td><span id="invRamName"></span></td>
+                        <td style="text-align:right;">Rs. <span id="invRamPrice"></span></td>
+                    </tr>
+                    <tr>
+                        <td><span id="invStorageName"></span></td>
+                        <td style="text-align:right;">Rs. <span id="invStoragePrice"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="invoice-totals">
+                <div class="total-row"><span>Subtotal:</span> <span>Rs. <span id="invSubtotal"></span></span></div>
+                <div class="total-row"><span>Estimated GST (18%):</span> <span>Rs. <span id="invTax"></span></span></div>
+                <div class="grand-total"><span>GRAND TOTAL:</span> <span>Rs. <span id="invGrandTotal"></span></span></div>
+            </div>
+
+            <div class="no-print" style="margin-top:35px; text-align:center;">
+                <button class="btn" style="width:auto; padding: 12px 28px; margin-right:12px; display:inline-block;" onclick="window.print()">🖨️ Print / Save as PDF</button>
+                <button class="btn btn-outline" style="width:auto; padding: 12px 28px; display:inline-block;" onclick="closeInvoice()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inventory = [
+  {
+    "brand": "Asus",
+    "model": "Chromebook CX1",
+    "category": "Student",
+    "price": 20000,
+    "cpu": "Intel Celeron N4020",
+    "ram": "4GB",
+    "storage": "128GB eMMC",
+    "display": "11.6-inch HD"
+  },
+  {
+    "brand": "Acer",
+    "model": "Extensa 15",
+    "category": "Student",
+    "price": 22000,
+    "cpu": "Intel Celeron N4500",
+    "ram": "8GB",
+    "storage": "256GB SSD",
+    "display": "15.6-inch HD"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "IdeaPad 1",
+    "category": "Student",
+    "price": 25000,
+    "cpu": "AMD Athlon Silver",
+    "ram": "8GB",
+    "storage": "256GB SSD",
+    "display": "14-inch HD"
+  },
+  {
+    "brand": "HP",
+    "model": "15s Basic",
+    "category": "Student",
+    "price": 28000,
+    "cpu": "Intel Core i3-1115G4",
+    "ram": "8GB",
+    "storage": "256GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "Dell",
+    "model": "Inspiron 3511",
+    "category": "Student",
+    "price": 32000,
+    "cpu": "Intel Core i3-1115G4",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "Asus",
+    "model": "Vivobook 15",
+    "category": "Student",
+    "price": 35000,
+    "cpu": "Intel Core i3-1215U",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "IdeaPad Slim 3",
+    "category": "Student",
+    "price": 38000,
+    "cpu": "AMD Ryzen 3 7320U",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "Acer",
+    "model": "Aspire 5",
+    "category": "Student",
+    "price": 40000,
+    "cpu": "Intel Core i5-1135G7",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "HP",
+    "model": "14s Advanced",
+    "category": "Student",
+    "price": 42000,
+    "cpu": "AMD Ryzen 5 5500U",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Samsung",
+    "model": "Galaxy Book Go",
+    "category": "Student",
+    "price": 45000,
+    "cpu": "Snapdragon 7c",
+    "ram": "4GB",
+    "storage": "128GB eMMC",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Dell",
+    "model": "Inspiron 14",
+    "category": "Student",
+    "price": 48000,
+    "cpu": "Intel Core i5-1235U",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Asus",
+    "model": "Vivobook 16X",
+    "category": "Student",
+    "price": 52000,
+    "cpu": "AMD Ryzen 5 5600H",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "16-inch WUXGA"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "IdeaPad Flex 5",
+    "category": "Student",
+    "price": 58000,
+    "cpu": "Intel Core i5-1235U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch Touch"
+  },
+  {
+    "brand": "HP",
+    "model": "Pavilion 14",
+    "category": "Student",
+    "price": 62000,
+    "cpu": "Intel Core i5-1240P",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Acer",
+    "model": "Swift 3",
+    "category": "Student",
+    "price": 65000,
+    "cpu": "Intel Core i5-1240P",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch QHD"
+  },
+  {
+    "brand": "Samsung",
+    "model": "Galaxy Book 2",
+    "category": "Student",
+    "price": 68000,
+    "cpu": "Intel Core i5-1235U",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "Dell",
+    "model": "Inspiron 16",
+    "category": "Student",
+    "price": 72000,
+    "cpu": "Intel Core i5-1335U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "16-inch FHD+"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "Yoga 6",
+    "category": "Student",
+    "price": 78000,
+    "cpu": "AMD Ryzen 7 7730U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "13.3-inch Touch"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Air M1",
+    "category": "Student",
+    "price": 85000,
+    "cpu": "Apple M1",
+    "ram": "8GB",
+    "storage": "256GB SSD",
+    "display": "13.3-inch Retina"
+  },
+  {
+    "brand": "Asus",
+    "model": "Zenbook 14X",
+    "category": "Student",
+    "price": 90000,
+    "cpu": "Intel Core i5-13500H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch OLED"
+  },
+  {
+    "brand": "HP",
+    "model": "Envy x360",
+    "category": "Student",
+    "price": 95000,
+    "cpu": "Intel Core i5-1335U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch Touch"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Air M2",
+    "category": "Student",
+    "price": 105000,
+    "cpu": "Apple M2",
+    "ram": "8GB",
+    "storage": "256GB SSD",
+    "display": "13.6-inch Liquid Retina"
+  },
+  {
+    "brand": "Dell",
+    "model": "XPS 13",
+    "category": "Student",
+    "price": 115000,
+    "cpu": "Intel Core i5-1230U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "13.4-inch FHD+"
+  },
+  {
+    "brand": "Samsung",
+    "model": "Galaxy Book 3",
+    "category": "Student",
+    "price": 118000,
+    "cpu": "Intel Core i7-1355U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch AMOLED"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Air M3",
+    "category": "Student",
+    "price": 125000,
+    "cpu": "Apple M3",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "15.3-inch Liquid Retina"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkBook 15",
+    "category": "Business",
+    "price": 35000,
+    "cpu": "Intel Core i3-1115G4",
+    "ram": "8GB",
+    "storage": "256GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "HP",
+    "model": "ProBook 440 G8",
+    "category": "Business",
+    "price": 42000,
+    "cpu": "Intel Core i5-1135G7",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Dell",
+    "model": "Vostro 3420",
+    "category": "Business",
+    "price": 46000,
+    "cpu": "Intel Core i5-1235U",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Asus",
+    "model": "ExpertBook B1",
+    "category": "Business",
+    "price": 49000,
+    "cpu": "Intel Core i5-1235U",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Acer",
+    "model": "TravelMate P2",
+    "category": "Business",
+    "price": 53000,
+    "cpu": "Intel Core i5-1240P",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad E14",
+    "category": "Business",
+    "price": 58000,
+    "cpu": "AMD Ryzen 5 7530U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "HP",
+    "model": "ProBook 450 G9",
+    "category": "Business",
+    "price": 65000,
+    "cpu": "Intel Core i5-1235U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "Dell",
+    "model": "Latitude 3540",
+    "category": "Business",
+    "price": 72000,
+    "cpu": "Intel Core i5-1335U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "15.6-inch FHD"
+  },
+  {
+    "brand": "Microsoft",
+    "model": "Surface Laptop Go 2",
+    "category": "Business",
+    "price": 75000,
+    "cpu": "Intel Core i5-1135G7",
+    "ram": "8GB",
+    "storage": "256GB SSD",
+    "display": "12.4-inch PixelSense"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad L14",
+    "category": "Business",
+    "price": 82000,
+    "cpu": "Intel Core i5-1335U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "HP",
+    "model": "EliteBook 640 G9",
+    "category": "Business",
+    "price": 88000,
+    "cpu": "Intel Core i7-1255U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Asus",
+    "model": "ExpertBook B5",
+    "category": "Business",
+    "price": 95000,
+    "cpu": "Intel Core i7-1260P",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "14-inch OLED"
+  },
+  {
+    "brand": "Dell",
+    "model": "Latitude 5440",
+    "category": "Business",
+    "price": 105000,
+    "cpu": "Intel Core i7-1355U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14-inch FHD"
+  },
+  {
+    "brand": "Microsoft",
+    "model": "Surface Laptop 5",
+    "category": "Business",
+    "price": 112000,
+    "cpu": "Intel Core i5-1235U",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "13.5-inch PixelSense"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad T14",
+    "category": "Business",
+    "price": 120000,
+    "cpu": "Intel Core i7-1355U",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "14-inch WUXGA"
+  },
+  {
+    "brand": "HP",
+    "model": "EliteBook 840 G10",
+    "category": "Business",
+    "price": 135000,
+    "cpu": "Intel Core i7-1355U",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "14-inch WUXGA"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Pro 14",
+    "category": "Business",
+    "price": 155000,
+    "cpu": "Apple M3",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "14.2-inch Liquid Retina"
+  },
+  {
+    "brand": "Dell",
+    "model": "XPS 14",
+    "category": "Business",
+    "price": 165000,
+    "cpu": "Intel Core Ultra 7",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "14-inch OLED"
+  },
+  {
+    "brand": "Microsoft",
+    "model": "Surface Laptop 6",
+    "category": "Business",
+    "price": 175000,
+    "cpu": "Intel Core Ultra 7",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "15-inch PixelSense"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad X1 Carbon",
+    "category": "Business",
+    "price": 190000,
+    "cpu": "Intel Core i7-1365U",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "14-inch OLED"
+  },
+  {
+    "brand": "HP",
+    "model": "Dragonfly G4",
+    "category": "Business",
+    "price": 210000,
+    "cpu": "Intel Core i7-1365U",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "13.5-inch WUXGA+"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Pro 14",
+    "category": "Business",
+    "price": 240000,
+    "cpu": "Apple M3 Pro",
+    "ram": "18GB",
+    "storage": "1TB SSD",
+    "display": "14.2-inch Liquid Retina"
+  },
+  {
+    "brand": "Dell",
+    "model": "Latitude 9440",
+    "category": "Business",
+    "price": 260000,
+    "cpu": "Intel Core i7-1365U",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "14-inch QHD+ Touch"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad X1 Yoga",
+    "category": "Business",
+    "price": 280000,
+    "cpu": "Intel Core i7-1365U",
+    "ram": "32GB",
+    "storage": "2TB SSD",
+    "display": "14-inch OLED Touch"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Pro 16",
+    "category": "Business",
+    "price": 350000,
+    "cpu": "Apple M3 Max",
+    "ram": "36GB",
+    "storage": "1TB SSD",
+    "display": "16.2-inch Liquid Retina XDR"
+  },
+  {
+    "brand": "MSI",
+    "model": "GF63 Thin",
+    "category": "Gaming",
+    "price": 52000,
+    "cpu": "Intel Core i5-11400H",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "GTX 1650 4GB"
+  },
+  {
+    "brand": "Acer",
+    "model": "Nitro 5",
+    "category": "Gaming",
+    "price": 58000,
+    "cpu": "AMD Ryzen 5 5600H",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "RTX 3050 4GB"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "IdeaPad Gaming 3",
+    "category": "Gaming",
+    "price": 62000,
+    "cpu": "Intel Core i5-12450H",
+    "ram": "8GB",
+    "storage": "512GB SSD",
+    "display": "RTX 3050 4GB"
+  },
+  {
+    "brand": "Asus",
+    "model": "TUF Gaming F15",
+    "category": "Gaming",
+    "price": 68000,
+    "cpu": "Intel Core i5-11400H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "RTX 3050 Ti"
+  },
+  {
+    "brand": "HP",
+    "model": "Victus 15",
+    "category": "Gaming",
+    "price": 74000,
+    "cpu": "AMD Ryzen 7 5800H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "RTX 3050 Ti"
+  },
+  {
+    "brand": "MSI",
+    "model": "Cyborg 15",
+    "category": "Gaming",
+    "price": 80000,
+    "cpu": "Intel Core i7-12650H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "RTX 4050 6GB"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "LOQ 15",
+    "category": "Gaming",
+    "price": 85000,
+    "cpu": "Intel Core i5-13420H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "RTX 4050 6GB"
+  },
+  {
+    "brand": "Acer",
+    "model": "Nitro V 15",
+    "category": "Gaming",
+    "price": 90000,
+    "cpu": "Intel Core i5-13420H",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4050 6GB"
+  },
+  {
+    "brand": "Dell",
+    "model": "G15",
+    "category": "Gaming",
+    "price": 95000,
+    "cpu": "Intel Core i7-12700H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "RTX 3060 6GB"
+  },
+  {
+    "brand": "Asus",
+    "model": "TUF Gaming A15",
+    "category": "Gaming",
+    "price": 105000,
+    "cpu": "AMD Ryzen 7 7735HS",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4060 8GB"
+  },
+  {
+    "brand": "HP",
+    "model": "Omen 16",
+    "category": "Gaming",
+    "price": 115000,
+    "cpu": "AMD Ryzen 7 7840HS",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4060 8GB"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "Legion Slim 5",
+    "category": "Gaming",
+    "price": 125000,
+    "cpu": "AMD Ryzen 7 7840HS",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4060 8GB"
+  },
+  {
+    "brand": "Acer",
+    "model": "Predator Helios Neo",
+    "category": "Gaming",
+    "price": 135000,
+    "cpu": "Intel Core i7-13700HX",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4060 8GB"
+  },
+  {
+    "brand": "MSI",
+    "model": "Katana 15",
+    "category": "Gaming",
+    "price": 145000,
+    "cpu": "Intel Core i7-13620H",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4070 8GB"
+  },
+  {
+    "brand": "Asus",
+    "model": "ROG Zephyrus G14",
+    "category": "Gaming",
+    "price": 160000,
+    "cpu": "AMD Ryzen 9 7940HS",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4060 8GB"
+  },
+  {
+    "brand": "Dell",
+    "model": "Alienware m16",
+    "category": "Gaming",
+    "price": 180000,
+    "cpu": "Intel Core i7-13700HX",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4070 8GB"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "Legion Pro 5i",
+    "category": "Gaming",
+    "price": 195000,
+    "cpu": "Intel Core i9-13900HX",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4070 8GB"
+  },
+  {
+    "brand": "Asus",
+    "model": "ROG Strix G16",
+    "category": "Gaming",
+    "price": 215000,
+    "cpu": "Intel Core i9-13980HX",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4070 8GB"
+  },
+  {
+    "brand": "Razer",
+    "model": "Blade 14",
+    "category": "Gaming",
+    "price": 240000,
+    "cpu": "AMD Ryzen 9 7940HS",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4070 8GB"
+  },
+  {
+    "brand": "MSI",
+    "model": "Vector GP68",
+    "category": "Gaming",
+    "price": 265000,
+    "cpu": "Intel Core i9-13980HX",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4080 12GB"
+  },
+  {
+    "brand": "Acer",
+    "model": "Predator Helios 16",
+    "category": "Gaming",
+    "price": 290000,
+    "cpu": "Intel Core i9-13900HX",
+    "ram": "32GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4080 12GB"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "Legion Pro 7i",
+    "category": "Gaming",
+    "price": 320000,
+    "cpu": "Intel Core i9-13900HX",
+    "ram": "32GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4080 12GB"
+  },
+  {
+    "brand": "Dell",
+    "model": "Alienware x16",
+    "category": "Gaming",
+    "price": 360000,
+    "cpu": "Intel Core i9-13900HK",
+    "ram": "32GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4080 12GB"
+  },
+  {
+    "brand": "Razer",
+    "model": "Blade 16",
+    "category": "Gaming",
+    "price": 450000,
+    "cpu": "Intel Core i9-13950HX",
+    "ram": "32GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4090 16GB"
+  },
+  {
+    "brand": "MSI",
+    "model": "Titan GT77 HX",
+    "category": "Gaming",
+    "price": 580000,
+    "cpu": "Intel Core i9-13980HX",
+    "ram": "64GB",
+    "storage": "4TB SSD",
+    "display": "RTX 4090 16GB"
+  },
+  {
+    "brand": "Asus",
+    "model": "Vivobook Pro 15",
+    "category": "Creator",
+    "price": 60000,
+    "cpu": "AMD Ryzen 5 5600H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "GTX 1650 4GB"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "IdeaPad Pro 5",
+    "category": "Creator",
+    "price": 78000,
+    "cpu": "Intel Core i5-13500H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "2.5K Display"
+  },
+  {
+    "brand": "HP",
+    "model": "Envy 16",
+    "category": "Creator",
+    "price": 95000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "Intel Arc A370M"
+  },
+  {
+    "brand": "Acer",
+    "model": "Swift X 14",
+    "category": "Creator",
+    "price": 110000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 3050 6GB"
+  },
+  {
+    "brand": "Asus",
+    "model": "Zenbook Pro 15",
+    "category": "Creator",
+    "price": 125000,
+    "cpu": "AMD Ryzen 7 6800H",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 3050 Ti OLED"
+  },
+  {
+    "brand": "Dell",
+    "model": "Inspiron 16 Plus",
+    "category": "Creator",
+    "price": 135000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4050 6GB"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "Yoga Pro 7",
+    "category": "Creator",
+    "price": 148000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "16GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4050 6GB"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Pro 14",
+    "category": "Creator",
+    "price": 169000,
+    "cpu": "Apple M3",
+    "ram": "16GB",
+    "storage": "512GB SSD",
+    "display": "14.2 Liquid Retina XDR"
+  },
+  {
+    "brand": "MSI",
+    "model": "Creator M16",
+    "category": "Creator",
+    "price": 185000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4060 8GB"
+  },
+  {
+    "brand": "Asus",
+    "model": "ProArt Studiobook 16",
+    "category": "Creator",
+    "price": 205000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4060 8GB OLED"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Pro 16",
+    "category": "Creator",
+    "price": 249000,
+    "cpu": "Apple M3 Pro",
+    "ram": "18GB",
+    "storage": "512GB SSD",
+    "display": "16.2 Liquid Retina XDR"
+  },
+  {
+    "brand": "Dell",
+    "model": "XPS 15",
+    "category": "Creator",
+    "price": 265000,
+    "cpu": "Intel Core i9-13900H",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "RTX 4070 8GB OLED"
+  },
+  {
+    "brand": "HP",
+    "model": "ZBook Studio G10",
+    "category": "Creator",
+    "price": 285000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "RTX 2000 Ada"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad P1 Gen 6",
+    "category": "Creator",
+    "price": 310000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "32GB",
+    "storage": "1TB SSD",
+    "display": "RTX 3000 Ada"
+  },
+  {
+    "brand": "Microsoft",
+    "model": "Surface Laptop Studio 2",
+    "category": "Creator",
+    "price": 340000,
+    "cpu": "Intel Core i7-13700H",
+    "ram": "64GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4060 8GB"
+  },
+  {
+    "brand": "Dell",
+    "model": "XPS 17",
+    "category": "Creator",
+    "price": 365000,
+    "cpu": "Intel Core i9-13900H",
+    "ram": "64GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4080 12GB"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Pro 16",
+    "category": "Creator",
+    "price": 399000,
+    "cpu": "Apple M3 Max",
+    "ram": "48GB",
+    "storage": "1TB SSD",
+    "display": "16.2 Liquid Retina XDR"
+  },
+  {
+    "brand": "Asus",
+    "model": "Zenbook Pro 16X",
+    "category": "Creator",
+    "price": 420000,
+    "cpu": "Intel Core i9-13905H",
+    "ram": "32GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4080 12GB"
+  },
+  {
+    "brand": "HP",
+    "model": "ZBook Fury 16 G10",
+    "category": "Creator",
+    "price": 460000,
+    "cpu": "Intel Core i9-13950HX",
+    "ram": "64GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4000 Ada"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad P16 Gen 2",
+    "category": "Creator",
+    "price": 520000,
+    "cpu": "Intel Core i9-13980HX",
+    "ram": "64GB",
+    "storage": "2TB SSD",
+    "display": "RTX 4000 Ada"
+  },
+  {
+    "brand": "Dell",
+    "model": "Precision 7780",
+    "category": "Creator",
+    "price": 600000,
+    "cpu": "Intel Core i9-13950HX",
+    "ram": "64GB",
+    "storage": "4TB SSD",
+    "display": "RTX 5000 Ada"
+  },
+  {
+    "brand": "Apple",
+    "model": "MacBook Pro 16 Maxed",
+    "category": "Creator",
+    "price": 720000,
+    "cpu": "Apple M3 Max 40-core",
+    "ram": "128GB",
+    "storage": "8TB SSD",
+    "display": "16.2 Liquid Retina XDR"
+  },
+  {
+    "brand": "HP",
+    "model": "ZBook Fury 16 Max",
+    "category": "Creator",
+    "price": 800000,
+    "cpu": "Intel Core i9-13950HX",
+    "ram": "128GB",
+    "storage": "4TB SSD",
+    "display": "RTX 5000 Ada"
+  },
+  {
+    "brand": "Lenovo",
+    "model": "ThinkPad P16 Ultimate",
+    "category": "Creator",
+    "price": 880000,
+    "cpu": "Intel Core i9-13980HX",
+    "ram": "128GB",
+    "storage": "8TB SSD",
+    "display": "RTX 5000 Ada"
+  },
+  {
+    "brand": "Dell",
+    "model": "Alienware m18 Workstation",
+    "category": "Creator",
+    "price": 950000,
+    "cpu": "Intel Core i9-13980HX",
+    "ram": "64GB",
+    "storage": "8TB SSD",
+    "display": "RTX 4090 16GB"
+  }
+];
+
+        let currentBasePrice = 0;
+
+        function handleSearch(e) {
+            e.preventDefault();
+            const budget = parseFloat(document.getElementById('budgetInput').value) || 0;
+            const category = document.getElementById('categorySelect').value;
+            const sort = document.getElementById('sortSelect').value;
+            const brandFilter = document.getElementById('brandInput').value.toLowerCase().trim();
+
+            let filtered = inventory.filter(item => {
+                const matchBudget = item.price <= budget;
+                const matchCategory = category === 'All' || item.category.toLowerCase() === category.toLowerCase();
+                const matchBrand = !brandFilter || item.brand.toLowerCase().includes(brandFilter);
+                return matchBudget && matchCategory && matchBrand;
+            });
+
+            // Sorting
+            filtered.sort((a, b) => sort === 'low' ? a.price - b.price : b.price - a.price);
+
+            // Compute best value index (RAM GB / price ratio)
+            let bestIndex = -1;
+            let bestRatio = 0;
+            filtered.forEach((item, idx) => {
+                const ramVal = parseInt(item.ram.replace(/[^0-9]/g, '')) || 8;
+                const ratio = ramVal / item.price;
+                if (ratio > bestRatio) {
+                    bestRatio = ratio;
+                    bestIndex = idx;
+                }
+            });
+
+            renderResults(filtered, bestIndex);
+        }
+
+        function renderResults(list, bestIndex) {
+            const resultsSection = document.getElementById('resultsSection');
+            const statsContainer = document.getElementById('statsContainer');
+            const cardsGrid = document.getElementById('cardsGrid');
+            
+            resultsSection.style.display = 'block';
+
+            if (list.length === 0) {
+                statsContainer.innerHTML = '';
+                cardsGrid.innerHTML = '<p style="color:#e53e3e; font-size: 18px; margin: 30px auto; width:100%;">No laptops match your criteria. Try increasing your budget or selecting All Categories.</p>';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            const totalPrice = list.reduce((acc, cur) => acc + cur.price, 0);
+            const avgPrice = Math.round(totalPrice / list.length);
+            const minPrice = Math.min(...list.map(i => i.price));
+
+            statsContainer.innerHTML = `
+                <div class="stats-bar">
+                    <div class="stat-item"><span style="color:#86868b; font-size:12px;">FOUND</span><br><b style="color:#1d1d1f;">${list.length} Laptops</b></div>
+                    <div class="stat-item"><span style="color:#86868b; font-size:12px;">AVERAGE PRICE</span><br><b style="color:#1d1d1f;">Rs. ${avgPrice.toLocaleString()}</b></div>
+                    <div class="stat-item"><span style="color:#86868b; font-size:12px;">LOWEST</span><br><b style="color:#0071e3;">Rs. ${minPrice.toLocaleString()}</b></div>
+                </div>
+            `;
+
+            let cardsHtml = '';
+            list.forEach((lap, idx) => {
+                const fullName = `${lap.brand} ${lap.model}`;
+                // deterministic stock count based on name hash
+                let hash = 0;
+                for (let i = 0; i < fullName.length; i++) hash = (hash << 5) - hash + fullName.charCodeAt(i);
+                const stockLeft = Math.abs(hash % 6) + 1;
+
+                const isBest = (idx === bestIndex);
+
+                cardsHtml += `
+                    <div class="card">
+                        <div>
+                            <div>
+                                <span class="tag">${lap.category}</span>
+                                ${isBest ? '<span class="best-value">👑 Best Value</span>' : ''}
+                            </div>
+                            <h3 style="margin:14px 0 10px 0; color:#1d1d1f; font-size:18px;">${fullName}</h3>
+                            <div class="specs-box">
+                                <p>⚙️ <b>CPU:</b> ${lap.cpu}</p>
+                                <p>🧠 <b>RAM:</b> ${lap.ram}</p>
+                                <p>💾 <b>Storage:</b> ${lap.storage}</p>
+                                <p>🖥️ <b>Display:</b> ${lap.display}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <p style="margin:0; font-size:20px; font-weight:700; color:#1d1d1f;">Rs. ${lap.price.toLocaleString()}</p>
+                                <p style="margin:0; font-size:12px; color:#e53e3e; font-weight:bold;">Only ${stockLeft} left</p>
+                            </div>
+                            <button class="btn" onclick="openConfigurator('${fullName.replace(/'/g, "\\'")}', ${lap.price})">Configure & Order</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cardsGrid.innerHTML = cardsHtml;
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetSearch() {
+            document.getElementById('searchContainer').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('budgetInput').focus();
+        }
+
+        function openConfigurator(laptopName, basePrice) {
+            currentBasePrice = basePrice;
+            document.getElementById('modalTitle').innerText = laptopName;
+            document.getElementById('modalBasePrice').innerText = 'Base Price: Rs. ' + basePrice.toLocaleString();
+            
+            // Reset radios to defaults
+            document.querySelector('input[name="ram"][value="0"]').checked = true;
+            document.querySelector('input[name="storage"][value="0"]').checked = true;
+            
+            document.getElementById('configModal').style.display = 'block';
+            calculateTotal();
+        }
+
+        function closeConfigurator() {
+            document.getElementById('configModal').style.display = 'none';
+        }
+
+        function calculateTotal() {
+            let total = currentBasePrice;
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+                total += parseInt(radio.value);
+            });
+            document.getElementById('modalFinalPrice').innerText = 'Final Price: Rs. ' + total.toLocaleString();
+        }
+
+        function generateInvoice() {
+            document.getElementById('configModal').style.display = 'none';
+            document.getElementById('invoiceView').style.display = 'block';
+            
+            const orderId = 'ORD-' + Math.floor(Math.random() * 90000 + 10000) + '-IN';
+            document.getElementById('invOrder').innerText = orderId;
+            document.getElementById('invDate').innerText = new Date().toLocaleDateString();
+            
+            const laptopName = document.getElementById('modalTitle').innerText;
+            const ramRadio = document.querySelector('input[name="ram"]:checked');
+            const storageRadio = document.querySelector('input[name="storage"]:checked');
+            
+            const ramPrice = parseInt(ramRadio.value);
+            const storagePrice = parseInt(storageRadio.value);
+            const subtotal = currentBasePrice + ramPrice + storagePrice;
+            const tax = Math.round(subtotal * 0.18);
+            const grandTotal = subtotal + tax;
+            
+            document.getElementById('invItemName').innerText = laptopName;
+            document.getElementById('invBasePrice').innerText = currentBasePrice.toLocaleString();
+            document.getElementById('invRamName').innerText = ramRadio.getAttribute('data-label');
+            document.getElementById('invRamPrice').innerText = ramPrice.toLocaleString();
+            document.getElementById('invStorageName').innerText = storageRadio.getAttribute('data-label');
+            document.getElementById('invStoragePrice').innerText = storagePrice.toLocaleString();
+            
+            document.getElementById('invSubtotal').innerText = subtotal.toLocaleString();
+            document.getElementById('invTax').innerText = tax.toLocaleString();
+            document.getElementById('invGrandTotal').innerText = grandTotal.toLocaleString();
+        }
+
+        function closeInvoice() {
+            document.getElementById('invoiceView').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('configModal');
+            if (event.target === modal) closeConfigurator();
+        };
+    </script>
 </body>
 </html>
